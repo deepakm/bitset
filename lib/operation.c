@@ -10,6 +10,7 @@ bitset_operation_t *bitset_operation_new(bitset_t *bitset) {
         bitset_oom();
     }
     operation->length = 0;
+    operation->steps = NULL;
     if (bitset) {
         bitset_operation_add(operation, bitset, BITSET_OR);
     }
@@ -405,6 +406,7 @@ static inline void bitset_operation_insertion_sort(bitset_offset *offsets, size_
     }
 }
 
+/*
 static inline unsigned char bitset_fls(bitset_word word) {
     static char table[64] = {
         32, 31, 0, 16, 0, 30, 3, 0, 15, 0, 0, 0, 29, 10, 2, 0,
@@ -422,6 +424,10 @@ static inline unsigned char bitset_fls(bitset_word word) {
     word = (word << 8) - word;
     word = (word << 8) - word;
     return table[word >> 26] - 1;
+}*/
+
+static inline unsigned char bitset_fls(bitset_word word) {
+    return (__builtin_clz(word)-1);
 }
 
 bitset_t *bitset_operation_exec(bitset_operation_t *operation) {
